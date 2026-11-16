@@ -212,6 +212,9 @@ def main():
         pbp_norm = normalize_pbp_string(row[pbp_col])
         rec_sets = parse_recorded_sets(row["score"])
 
+        # Simulate the match under both initial server hypotheses because the raw CSV
+        # lists the first server backwards in ~50% of records; compare reconstructed
+        # set scores against the official score to identify the true first server.
         pts_0, sets_0 = decode_match_points(pbp_norm, first_server_idx=0)
         pts_1, sets_1 = decode_match_points(pbp_norm, first_server_idx=1)
 
