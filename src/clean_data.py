@@ -124,7 +124,7 @@ def decode_match_points(pbp_norm, first_server_idx):
             continue
 
         elif ch in ("S", "R"):
-            # Detect tiebreak start at 6-6 (standard tiebreak set)
+            # Detect tiebreak start at 6-6 
             if not in_tiebreak and games[0] == 6 and games[1] == 6 and pts == [0, 0]:
                 in_tiebreak = True
                 tb_first_server = game_server
@@ -223,18 +223,8 @@ def main():
             first_server = 1
             reversed_count += 1
         else:
-            # Fallback prefix match (e.g., for the 2 administrative default matches)
-            if rec_sets and sets_0[: len(rec_sets)] == rec_sets:
-                chosen_pts = pts_0
-                first_server = 0
-            elif rec_sets and sets_1[: len(rec_sets)] == rec_sets:
-                chosen_pts = pts_1
-                first_server = 1
-                reversed_count += 1
-            else:
-                chosen_pts = pts_0
-                first_server = 0
-                unmatched_count += 1
+            unmatched_count += 1
+            continue
 
         # Relabel so Player A is always the actual first server and Player B is second
         if first_server == 0:
@@ -259,11 +249,6 @@ def main():
         })
 
     out_df = pd.DataFrame(decoded_records)
-    total_pts = out_df["num_points"].sum()
-    print(f"First server reversed in: {reversed_count} matches ({reversed_count / len(out_df):.1%}) (Proposal: 16,093 / 50.1%)")
-    print(f"Unmatched score checks: {unmatched_count}")
-    print(f"Total decoded points: {total_pts:,} (Proposal: 4,760,298)")
-
     os.makedirs(os.path.dirname(OUTPUT_PATH), exist_ok=True)
     out_df["surface"] = out_df["surface"].astype(str)
     out_df["draw"] = out_df["draw"].astype(str)
