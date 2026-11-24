@@ -95,6 +95,12 @@ def main():
     validation_set = df[df['date'].between("2016-01-01", "2016-06-30", "both")]
     test_set = df[df['date'].between("2016-07-01", "2017-02-18", "both")]
 
+    out_dir = ROOT_DIR / "data/processed"
+    out_dir.mkdir(parents=True, exist_ok=True)
+
+    training_set.to_parquet(out_dir / "train.parquet", index=False)
+    validation_set.to_parquet(out_dir / "val.parquet", index=False)
+    test_set.to_parquet(out_dir / "test.parquet", index=False)
 
 
 if __name__ == "__main__":
